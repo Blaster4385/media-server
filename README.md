@@ -2,11 +2,11 @@
 
 ## Components
 
-- [Plex](http://plex.tv/) for streaming
+- [Jellyfin](https://jellyfin.org/) for streaming
 - [Prowlarr](https://prowlarr.com/) for managing indexers
 - [Sonarr](https://sonarr.tv/) for series
 - [Radarr](https://radarr.video/) for movies
-- [Transmission](https://transmissionbt.com/) as a download client
+- [Qbittorrent](https://www.qbittorrent.org/) as a download client
 
 ## Setup
 
@@ -21,16 +21,16 @@
 
   |Service|URL|
   |---|---|
-  |Plex|http://{host ip}:32400/web|
-  |Transmission|http://{host ip}:9091|
+  |Jellyfin|http://{host ip}:8096/|
+  |Qbittorent|http://{host ip}:8080|
   |Radarr|http://{host ip}:7878|
   |Sonarr|http://{host ip}:8989|
   |Prowlarr|http://{host ip}:9696|
-- You need to set the download client as transmission in both sonarr and radarr. To do this:
+- You need to set the download client as qbittorent in both sonarr and radarr. To do this:
     - Go to Settings > Download Clients
     - Add new client
     - Set the host as the ip address of the host
-    - Leave port as default (9091)
+    - Leave port as default (8080)
     - Test the connection and then Save
 - You also need to set the root folder in both sonarr and radarr. To do this:
     - Go to Settings/Media Management

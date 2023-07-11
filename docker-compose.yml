@@ -2,40 +2,41 @@ version: '3'
 
 services:
   # media server
-  plex:
-    image: linuxserver/plex
+  jellyfin:
+    image: linuxserver/jellyfin
     environment:
       - PUID=1000
       - PGID=1000
       - UMASK=002
     volumes:
-      - "./plex/config:/config"
+      - "./jellyfin/config:/config"
       - "${VOL_SERIES}:/data/series"
       - "${VOL_MOVIES}:/data/movies"
       - "${VOL_MUSIC}:/data/music"
       - "${VOL_OTHER}:/data/other"
       - "${VOL_PHOTOS}:/data/photos"
-      - "./plex/transcode:/transcode"
+      - "./jellyfin/transcode:/transcode"
       - "/etc/localtime:/etc/localtime:ro"
     network_mode: "host"
     restart: "unless-stopped"
   # torrent downloader
-  transmission:
-    image: linuxserver/transmission
+  qbittorrent:
+    image: linuxserver/qbittorrent
     environment:
       - PUID=1000
       - PGID=1000
       - UMASK=002
     volumes:
-      - "./transmission/config:/config"
-      - "./transmission/watch:/watch"
+      - "./qbittorrent/config:/config"
+      - "./qbittorrent/watch:/watch"
       - "${VOL_DOWNLOAD}:/downloads"
-      - "${VOL_MOVIES}:/downloads/movies"
-      - "${VOL_SERIES}:/downloads/series"
-      - "${VOL_OTHER}:/downloads/other"
       - "/etc/localtime:/etc/localtime:ro"
     network_mode: "host"
     restart: "unless-stopped"
+    ports:
+      - "8080:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
   # movie search
   radarr:
     image: linuxserver/radarr
