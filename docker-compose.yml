@@ -1,0 +1,81 @@
+version: '3'
+
+services:
+  # media server
+  plex:
+    image: linuxserver/plex
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+    volumes:
+      - "./plex/config:/config"
+      - "${VOL_SERIES}:/data/series"
+      - "${VOL_MOVIES}:/data/movies"
+      - "${VOL_MUSIC}:/data/music"
+      - "${VOL_OTHER}:/data/other"
+      - "${VOL_PHOTOS}:/data/photos"
+      - "./plex/transcode:/transcode"
+      - "/etc/localtime:/etc/localtime:ro"
+    network_mode: "host"
+    restart: "unless-stopped"
+  # torrent downloader
+  transmission:
+    image: linuxserver/transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+    volumes:
+      - "./transmission/config:/config"
+      - "./transmission/watch:/watch"
+      - "${VOL_DOWNLOAD}:/downloads"
+      - "${VOL_MOVIES}:/downloads/movies"
+      - "${VOL_SERIES}:/downloads/series"
+      - "${VOL_OTHER}:/downloads/other"
+      - "/etc/localtime:/etc/localtime:ro"
+    network_mode: "host"
+    restart: "unless-stopped"
+  # movie search
+  radarr:
+    image: linuxserver/radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+    volumes:
+      - "${VOL_DOWNLOAD}:/downloads"
+      - "${VOL_MOVIES}:/movies"
+      - "./radarr/config:/config"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+      - "7878:7878"
+    restart: "unless-stopped"
+  # tv series search
+  sonarr:
+    image: linuxserver/sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+    volumes:
+      - "${VOL_DOWNLOAD}:/downloads"
+      - "${VOL_SERIES}:/series"
+      - "./sonarr/config:/config"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+      - "8989:8989"
+    restart: "unless-stopped"
+  # tv series search
+  prowlarr:
+    image: linuxserver/prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+    volumes:
+      - "./prowlarr/config:/config"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+      - "9696:9696"
+    restart: "unless-stopped" 
